@@ -1,4 +1,4 @@
-package com.vivek08v.store;
+package com.vivek08v.Restaurant08v;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

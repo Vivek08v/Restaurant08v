@@ -1,4 +1,4 @@
-package com.vivek08v.store;
+package com.vivek08v.Restaurant08v;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
