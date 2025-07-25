@@ -1,4 +1,4 @@
-package com.vivek08v.Restaurant08v;
+package com.vivek08v.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
