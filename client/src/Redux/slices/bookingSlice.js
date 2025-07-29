@@ -23,5 +23,5 @@ const bookingSlice = createSlice({
     }
 });
 
-const {setBooking, setLoading} = bookingSlice.actions;
+export const {setBooking, setLoading} = bookingSlice.actions;
 export default bookingSlice.reducer;
