@@ -14,6 +14,16 @@ public class TableBooking {
     private LocalDateTime dateTime;
     private String status;
 
+    public TableBooking(){}
+
+    public TableBooking(Integer id, Integer userId, Integer numberOfPeople, LocalDateTime dateTime, String status){
+        this.id = id;
+        this.userId = userId;
+        this.numberOfPeople = numberOfPeople;
+        this.dateTime = dateTime;
+        this.status = status;
+    }
+
     // Getters and Setters
     public Integer getId() {
         return id;
