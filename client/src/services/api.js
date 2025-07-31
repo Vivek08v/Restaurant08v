@@ -3,7 +3,8 @@
 const base_url = "http://localhost:8080/api/v1"
 
 export const userEndPoints = {
-
+    userSignUpAPI: base_url+"/auth/signup",
+    userLogInAPI: base_url+"/auth/login",
 }
 
 export const bookingEndPoints = {

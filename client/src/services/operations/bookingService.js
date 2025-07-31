@@ -7,7 +7,7 @@ const {getAllbookingsAPI, setBookingAPI} = bookingEndPoints;
 export const getAllbookingsService = () => {
     return async(dispatch) => {
         dispatch(setLoading(true));
-        console.log(getAllbookingsAPI)
+        // console.log(getAllbookingsAPI)
         try{
             const response = await apiConnector('GET', getAllbookingsAPI);
             console.log("response: ", response.data);

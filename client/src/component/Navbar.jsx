@@ -1,7 +1,8 @@
 import { useState } from "react";
-
+import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const {user} = useSelector((state)=> state.userSlice);
 
     return (
         <div className="bg-amber-200 h-auto w-auto flex justify-around">
@@ -12,12 +13,12 @@ const Navbar = () => {
                 <div>Delivery</div>
             </div>
             <div className="flex gap-5">
-                {isLoggedIn && <div>Notif</div>}
-                {isLoggedIn && <div>History</div>}
-                {isLoggedIn && <div>User</div>}
+                {user && <div>Notif</div>}
+                {user && <div>History</div>}
+                {user && <div>User</div>}
 
-                {!isLoggedIn && <div>SignIn</div>}
-                {!isLoggedIn && <div>LogIn</div>}
+                {!user && <NavLink to={"/signup"}><div>SignIn</div></NavLink>}
+                {!user && <NavLink to={"/login"}><div>LogIn</div></NavLink>}
 
             </div>
             
