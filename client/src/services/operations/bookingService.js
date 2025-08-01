@@ -1,6 +1,7 @@
 import { apiConnector } from "../apiConnector";
 import { bookingEndPoints } from "../api";
 import { setBooking, setLoading } from "../../Redux/slices/bookingSlice";
+import { useSelector } from "react-redux";
 
 const {getAllbookingsAPI, setBookingAPI} = bookingEndPoints;
 
@@ -26,11 +27,18 @@ export const getAllbookingsService = () => {
     }
 }
 
-export const bookTicketsService = () => {
+export const bookTicketsService = (payload, token) => {
     return async(dispatch) => {
+        console.log("path :",setBookingAPI)
+        console.log(payload, token)
         dispatch(setLoading(true));
         try{
-            const response = apiConnector('POST', setBookingAPI);
+            const response = apiConnector('POST', setBookingAPI, 
+                {
+                    Authorization: `Bearer ${token}`,
+                },
+                payload
+            );
             console.log("response: ", response.data);
 
             if(!response.data.success){

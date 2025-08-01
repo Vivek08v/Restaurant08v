@@ -10,13 +10,19 @@ const userSlice = createSlice({
     initialState: initialState,
     reducers: {
         setUserAndToken: (state, action) => {
-            state.user = action.payload;
-            if(state.user != null){
-                state.token = state.user.token;
+            console.log(action.payload)
+            const {user, token} = action.payload;
+            // state.user = action.payload;
+            if(user != null){
+                state.user = user;
+                state.token = token;
             }
             else{
-                state.token = null
+                state.token = null;
+                state.user = null;
             }
+
+            console.log(token, user)
         },
         setLoading: (state, action) => {
             // const {loading} = action.payload.loading;

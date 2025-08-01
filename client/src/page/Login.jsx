@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { logInService } from "../services/operations/userService";
 
 const Login = () => {
 
   const [formData, setFormData] = useState({email: "", password: ""});
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const changeHandler = (e)=>{
     setFormData((prev)=> ({...prev, [e.target.name] : e.target.value}))
@@ -14,7 +16,7 @@ const Login = () => {
 
   const submitHandler = (e)=>{
     e.preventDefault();
-    dispatch(logInService(formData));
+    dispatch(logInService(formData, navigate));
     console.log("logIn form sent data to service");
   }
   return (

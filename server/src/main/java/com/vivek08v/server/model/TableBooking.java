@@ -1,30 +1,31 @@
 package com.vivek08v.server.model;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 @Scope("prototype")
 public class TableBooking {
     private Integer id;
     private Integer userId;
-    private Integer numberOfPeople;
-    private LocalDateTime dateTime;
+    private Integer noOfPeople;
+    private LocalDate Date;
+    private LocalTime Time;
     private String status;
 
     public TableBooking(){}
 
-    public TableBooking(Integer id, Integer userId, Integer numberOfPeople, LocalDateTime dateTime, String status){
-        this.id = id;
+    public TableBooking(Integer userId, Integer noOfPeople, LocalDate Date, LocalTime Time, String status){
         this.userId = userId;
-        this.numberOfPeople = numberOfPeople;
-        this.dateTime = dateTime;
+        this.noOfPeople = noOfPeople;
+        this.Date = Date;
+        this.Time = Time;
         this.status = status;
     }
 
-    // Getters and Setters
     public Integer getId() {
         return id;
     }
@@ -41,20 +42,28 @@ public class TableBooking {
         this.userId = userId;
     }
 
-    public Integer getNumberOfPeople() {
-        return numberOfPeople;
+    public Integer getNoOfPeople() {
+        return noOfPeople;
     }
 
-    public void setNumberOfPeople(Integer numberOfPeople) {
-        this.numberOfPeople = numberOfPeople;
+    public void setNoOfPeople(Integer noOfPeople) {
+        this.noOfPeople = noOfPeople;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return Date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate Date) {
+        this.Date = Date;
+    }
+
+    public LocalTime getTime() {
+        return Time;
+    }
+
+    public void setTime(LocalTime Time) {
+        this.Time = Time;
     }
 
     public String getStatus() {
@@ -65,14 +74,14 @@ public class TableBooking {
         this.status = status;
     }
 
-    // Optional: toString() method for better logging/debugging
     @Override
     public String toString() {
         return "TableBooking{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", numberOfPeople=" + numberOfPeople +
-                ", dateTime=" + dateTime +
+                ", numberOfPeople=" + noOfPeople +
+                ", date=" + Date +
+                ", time=" + Time +
                 ", status='" + status + '\'' +
                 '}';
     }

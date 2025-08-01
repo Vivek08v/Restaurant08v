@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { bookTicketsService, getAllbookingsService } from '../services/operations/bookingService';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-const PayPopUp = ({ date, slot, seats, onClose }) => {
+const PayPopUp = ({ date, slot, noOfSeats, onClose }) => {
+  const {token} = useSelector((state)=> state.userSlice);
   const dispatch = useDispatch();
   const [isPaymentDone, setIsPaymentDone] = useState(false);
-  const payload = {date: date, slot: slot, seats: seats}
+  const payload = {date: date, slot: slot, noOfSeats: noOfSeats}
 
   const handlePay = () => {
-    dispatch(getAllbookingsService());
+    console.log(payload);
+    dispatch(bookTicketsService(payload, token));
     setIsPaymentDone(true);
   }
 
@@ -23,7 +25,7 @@ const PayPopUp = ({ date, slot, seats, onClose }) => {
               <h2 className="text-lg font-semibold text-gray-800 mb-3">💳 Confirm Booking</h2>
               <div className="text-sm text-gray-600 mb-2">Date: <strong>{date}</strong></div>
               <div className="text-sm text-gray-600 mb-2">Time Slot: <strong>{slot}</strong></div>
-              <div className="text-sm text-gray-600 mb-4">Seats: <strong>{seats}</strong></div>
+              <div className="text-sm text-gray-600 mb-4">Seats: <strong>{noOfSeats}</strong></div>
               <button
                 onClick={() => handlePay()}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md transition"

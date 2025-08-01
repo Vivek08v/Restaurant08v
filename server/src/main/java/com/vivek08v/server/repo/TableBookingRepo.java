@@ -1,13 +1,15 @@
 package com.vivek08v.server.repo;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.vivek08v.server.model.TableBooking;
-// import java.collections;
 
 @Repository
 public class TableBookingRepo {
@@ -22,20 +24,33 @@ public class TableBookingRepo {
         return this.template;
     }
 
-    public void save(TableBooking tabBook){
-        String sql = "insert into tableBooking (id, userId, numberOfPeoples, dateTime, status) values (?, ?, ?, ?, ?)";
-        template.update(sql, tabBook.getId(), tabBook.getUserId(), tabBook.getNumberOfPeople(), tabBook.getDateTime(), tabBook.getStatus());
-        System.out.println("successfully table booked...");
+    public TableBooking saveBooking(TableBooking tabBook){
+        String sql = "insert into tableBooking (userId, numberOfPeoples, dateTime, status) values (?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        
+        template.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, tabBook.getUserId());
+            ps.setInt(2, tabBook.getNoOfPeople());
+            ps.setDate(3, java.sql.Date.valueOf(tabBook.getDate()));
+            ps.setTime(4, java.sql.Time.valueOf(tabBook.getTime()));
+            ps.setString(5, tabBook.getStatus());
+            return ps;
+        }, keyHolder);
+
+        System.out.println("Added successfully with ID = " + tabBook.getId());
+        return tabBook;
     }
 
-    public List<TableBooking> findAll(){
+    public List<TableBooking> findAllBookings(){
         String sql = "select * from tableBooking";
         List<TableBooking> allBookedTables = template.query(sql, (rs, rowNo) -> {
             TableBooking tabBook = new TableBooking();
             tabBook.setId(rs.getInt("id"));
             tabBook.setUserId(rs.getInt("userid"));
-            tabBook.setNumberOfPeople(rs.getInt("noOfPeople"));
-            tabBook.setDateTime(rs.getTimestamp("dateTime").toLocalDateTime());
+            tabBook.setNoOfPeople(rs.getInt("noOfPeople"));
+            tabBook.setDate(rs.getDate("Date").toLocalDate());
+            tabBook.setTime(rs.getTime("Time").toLocalTime());
             tabBook.setStatus(rs.getString("status"));
             return tabBook;
         });

@@ -43,19 +43,12 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
             }
 
-            // Example password check if you had password in DB
-            // if (!request.getPassword().equals("password")) {
-            //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-            // }
-
-            // 2. Hardcoded check (temporary - replace with database check)
-
             System.out.println(user.getPassword() + request.getPassword());
             if (user.getEmail().equals(request.getEmail()) && user.getPassword().equals(request.getPassword())) {
                 System.out.println("hii11");
-                String token = jwtUtil.generateToken(request.getEmail());
+                String token = jwtUtil.generateToken(user.getEmail(), user.getId(), "CUST");
                 System.out.println("Login successful, token generated");
-                return ResponseEntity.ok(new AuthResponse(token));
+                return ResponseEntity.ok(new AuthResponse(user, token, true));
             }
 
             System.out.println("Invalid credentials");
@@ -79,10 +72,10 @@ public class AuthController {
         newUser.setAddress(request.getAddress());
         newUser.setPassword(request.getPassword());
 
-        userRepo.save(newUser);
+        User userIns = userRepo.saveUser(newUser);
 
-        String token = jwtUtil.generateToken(request.getEmail());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new AuthResponse(token));
+        String token = jwtUtil.generateToken(userIns.getEmail(), userIns.getId(), userIns.getRole());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AuthResponse(userIns, token, true));
     }
 }
 
@@ -142,12 +135,22 @@ class SignupRequest {
 }
 
 class AuthResponse {
+    private User user;
     private String token;
-    public AuthResponse(String token) {
+    private Boolean success;
+    public AuthResponse(User user, String token, Boolean success) {
+        this.user = user;
         this.token = token;
+        this.success = success;
+    }
+    public User getUser() {
+        return user;
     }
     public String getToken() {
         return token;
+    }
+    public Boolean getSuccess() {
+        return success;
     }
 }
 

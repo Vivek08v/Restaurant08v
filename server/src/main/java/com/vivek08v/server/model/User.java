@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class User {
     private Integer id;
     private String name;
+    private String role;
     private String email;
     private String password;
     private String address;
@@ -26,6 +27,14 @@ public class User {
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public String getRole(){
+        return role;
+    }
+
+    public void setRole(String role){
+        this.role = role;
     }
 
     public String getEmail(){
