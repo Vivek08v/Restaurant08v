@@ -49,10 +49,21 @@ public class JwtUtil {
     // ✅ Validate token
     public boolean validateToken(String token) {
         try {
-            extractAllClaims(token); // if this fails, token is invalid
-            return true;
+            Claims claims = extractAllClaims(token);
+            return !claims.getExpiration().before(new Date());
         } catch (JwtException e) {
+            System.out.println("Token validation failed: " + e.getMessage());
             return false;
+        }
+    }
+
+    // ✅ Check if token is expired
+    public boolean isTokenExpired(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            return claims.getExpiration().before(new Date());
+        } catch (JwtException e) {
+            return true;
         }
     }
 

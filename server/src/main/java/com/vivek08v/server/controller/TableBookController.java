@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vivek08v.server.model.TableBooking;
 import com.vivek08v.server.repo.TableBookingRepo;
 import com.vivek08v.server.utils.JwtUtil;
+import com.vivek08v.server.utils.CustomUserDetails;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -63,25 +64,32 @@ public class TableBookController {
     public ResponseEntity<?> bookTable(@RequestBody BookingRequest request) {
         System.out.println("hi, /booking server reached...");
         try{
-            if(request.getDate()==null || request.getTime()==null || request.getSeats()==null){
-                System.out.println("request: "+request);
+            if(request.getDate()==null || request.getTime()==null || request.getNoOfSeats()==null){
+                System.out.println("request: "+request.toString());
                 return ResponseEntity.badRequest().body("Missing Date or Slot or Seats");
             }
 
-            System.out.println("1");
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String token = ((UsernamePasswordAuthenticationToken) auth).getCredentials().toString();
+            // System.out.println("1");
+            // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            // String token = ((UsernamePasswordAuthenticationToken) auth).getCredentials().toString();
 
-            System.out.println("2");
-            String email = jwtUtil.extractUsername(token);
-            Integer userId = jwtUtil.extractUserId(token);
-            String role = jwtUtil.extractRole(token);
+            // System.out.println("2");
+            // String email = jwtUtil.extractUsername(token);
+            // Integer userId = jwtUtil.extractUserId(token);
+            // String role = jwtUtil.extractRole(token);
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+                    
+            String email = user.getUsername();
+            Integer userId = user.getId();
+            String role = user.getRole();
 
             System.out.println("3");
 
             TableBooking tableBooking = new TableBooking();
             tableBooking.setUserId(userId);
-            tableBooking.setNoOfPeople(request.getSeats());
+            tableBooking.setNoOfPeople(request.getNoOfSeats());
             tableBooking.setDate(request.getDate());
             tableBooking.setTime(request.getTime());
             tableBooking.setStatus("Booked");
@@ -126,11 +134,20 @@ class BookingRequest{
         return this.Time;
     }
 
-    public void setSeats(Integer noOfSeats){
+    public void setNoOfSeats(Integer noOfSeats){
         this.noOfSeats = noOfSeats;
     }
-    public Integer getSeats(){
+    public Integer getNoOfSeats(){
         return this.noOfSeats;
+    }
+
+    @Override
+    public String toString(){
+        return "User{" +
+                " Date=" + Date +
+                ", Time=" + Time +
+                ", noOfSeats=" + noOfSeats +
+                "}";
     }
 }
 

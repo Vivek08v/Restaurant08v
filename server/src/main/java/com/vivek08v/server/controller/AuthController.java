@@ -62,20 +62,33 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
-        if (userRepo.existsByEmail(request.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
+        try {
+            // Validate input
+            if (request.getEmail() == null || request.getPassword() == null || 
+                request.getName() == null || request.getAddress() == null) {
+                return ResponseEntity.badRequest().body("All fields are required");
+            }
+
+            if (userRepo.existsByEmail(request.getEmail())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
+            }
+
+            User newUser = new User();
+            newUser.setName(request.getName());
+            newUser.setEmail(request.getEmail());
+            newUser.setAddress(request.getAddress());
+            newUser.setPassword(request.getPassword());
+            newUser.setRole("CUST"); // Set default role for new users
+
+            User userIns = userRepo.saveUser(newUser);
+            System.out.println("User created with ID: " + userIns.getId() + " and role: " + userIns.getRole());
+
+            String token = jwtUtil.generateToken(userIns.getEmail(), userIns.getId(), userIns.getRole());
+            return ResponseEntity.status(HttpStatus.CREATED).body(new AuthResponse(userIns, token, true));
+        } catch (Exception e) {
+            System.out.println("Signup error: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Signup failed");
         }
-
-        User newUser = new User();
-        newUser.setName(request.getName());
-        newUser.setEmail(request.getEmail());
-        newUser.setAddress(request.getAddress());
-        newUser.setPassword(request.getPassword());
-
-        User userIns = userRepo.saveUser(newUser);
-
-        String token = jwtUtil.generateToken(userIns.getEmail(), userIns.getId(), userIns.getRole());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new AuthResponse(userIns, token, true));
     }
 }
 

@@ -18,7 +18,6 @@ public class StoreApplication {
 			System.out.println(tabBookRepo.findAllBookings());
 			
 			UserRepo repo = context.getBean(UserRepo.class);
-			// repo.save(user);
 			System.out.println(repo.findAllUsers());
 		} 
 		catch (Exception e) {

@@ -33,7 +33,7 @@ export const bookTicketsService = (payload, token) => {
         console.log(payload, token)
         dispatch(setLoading(true));
         try{
-            const response = apiConnector('POST', setBookingAPI, 
+            const response = await apiConnector('POST', setBookingAPI, 
                 {
                     Authorization: `Bearer ${token}`,
                 },

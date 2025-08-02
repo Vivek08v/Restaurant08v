@@ -34,7 +34,7 @@ public class UserRepo {
     // }
 
     public User saveUser(User user) {
-        String sql = "INSERT INTO user (name, email, address) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO user (name, email, address, password, role) VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         
         template.update(connection -> {
@@ -42,6 +42,8 @@ public class UserRepo {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getAddress());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getRole() != null ? user.getRole() : "CUST");
             return ps;
         }, keyHolder);
     

@@ -24,11 +24,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Explicit CORS config
-            .csrf(csrf -> csrf.disable()) // ✅ Disable CSRF
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // ✅ Stateless session
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**").permitAll() // ✅ Fix your endpoint path
+                .requestMatchers("/health", "/").permitAll()
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/booking").hasAnyRole("CUST", "ADMIN")
+                .requestMatchers("/api/v1/all-bookings").hasRole("ADMIN")
+                .requestMatchers("/api/v1/test/auth").authenticated()
+                .requestMatchers("/api/v1/test/admin").hasRole("ADMIN")
+                .requestMatchers("/api/v1/test/customer").hasRole("CUST")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

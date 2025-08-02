@@ -25,7 +25,7 @@ public class TableBookingRepo {
     }
 
     public TableBooking saveBooking(TableBooking tabBook){
-        String sql = "insert into tableBooking (userId, numberOfPeoples, dateTime, status) values (?, ?, ?, ?, ?)";
+        String sql = "insert into tableBooking (userId, noOfPeoples, date, time, status) values (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         
         template.update(connection -> {
@@ -38,19 +38,21 @@ public class TableBookingRepo {
             return ps;
         }, keyHolder);
 
+        tabBook.setId(keyHolder.getKey().intValue());
+
         System.out.println("Added successfully with ID = " + tabBook.getId());
         return tabBook;
     }
 
     public List<TableBooking> findAllBookings(){
-        String sql = "select * from tableBooking";
+        String sql = "SELECT * FROM tablebooking";
         List<TableBooking> allBookedTables = template.query(sql, (rs, rowNo) -> {
             TableBooking tabBook = new TableBooking();
             tabBook.setId(rs.getInt("id"));
-            tabBook.setUserId(rs.getInt("userid"));
-            tabBook.setNoOfPeople(rs.getInt("noOfPeople"));
-            tabBook.setDate(rs.getDate("Date").toLocalDate());
-            tabBook.setTime(rs.getTime("Time").toLocalTime());
+            tabBook.setUserId(rs.getInt("userId"));
+            tabBook.setNoOfPeople(rs.getInt("noOfPeoples"));
+            tabBook.setDate(rs.getDate("date").toLocalDate());
+            tabBook.setTime(rs.getTime("time").toLocalTime());
             tabBook.setStatus(rs.getString("status"));
             return tabBook;
         });
