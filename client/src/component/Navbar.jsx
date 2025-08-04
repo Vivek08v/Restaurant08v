@@ -14,7 +14,7 @@ const Navbar = () => {
             </div>
             <div className="flex gap-5">
                 {user && <div>Notif</div>}
-                {user && <div>History</div>}
+                {user && <NavLink to={"/history"}><div>History</div></NavLink>}
                 {user && <div>User</div>}
 
                 {!user && <NavLink to={"/signup"}><div>SignIn</div></NavLink>}

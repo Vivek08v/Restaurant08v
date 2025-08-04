@@ -9,5 +9,6 @@ export const userEndPoints = {
 
 export const bookingEndPoints = {
     getAllbookingsAPI: base_url+"/all-bookings",
+    getMybookingsAPI: base_url+"/my-bookings",
     setBookingAPI: base_url+"/booking"
 }

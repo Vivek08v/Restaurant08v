@@ -20,7 +20,7 @@ const bookingSlice = createSlice({
         setBooking: (state, action) => {
             // const {id, date, time, noOfSeats, status} = action.payload;
             const booking = action.payload;
-            state.booking.push(booking);
+            state.booking = booking;
 
             console.log(state.booking);
         },

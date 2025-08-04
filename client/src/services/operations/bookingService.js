@@ -1,30 +1,48 @@
 import { apiConnector } from "../apiConnector";
 import { bookingEndPoints } from "../api";
 import { setBooking, setLoading } from "../../Redux/slices/bookingSlice";
-import { useSelector } from "react-redux";
 
-const {getAllbookingsAPI, setBookingAPI} = bookingEndPoints;
+const {getAllbookingsAPI, setBookingAPI, getMybookingsAPI} = bookingEndPoints;
 
-export const getAllbookingsService = () => {
-    return async(dispatch) => {
-        dispatch(setLoading(true));
-        // console.log(getAllbookingsAPI)
-        try{
-            const response = await apiConnector('GET', getAllbookingsAPI);
-            console.log("response: ", response.data);
+export const getAllbookingsService = async() => {
+    // console.log(getAllbookingsAPI)
 
-            if(!response.data.success){
-                throw new Error(response.data.message);
-            }
-
-            dispatch(setBooking(response.data));
-            console.log("api: getAllbookings successfully...");
+    let allDatas = []
+    try{
+        const response = await apiConnector('GET', getAllbookingsAPI);
+        allDatas.push(response.data);
+        console.log("response: ", response.data);
+        if(!response.data.success){
+            throw new Error(response.data.message);
         }
-        catch(error){
-            console.log("error: getAllbookings failed...", error);
-        }
-        dispatch(setLoading(false));
+        console.log("api: getAllbookings successfully...");
     }
+    catch(error){
+        console.log("error: getAllbookings failed...", error);
+    }
+    return allDatas;
+}
+
+export const getMybookingsService = async (token) => {
+    // console.log(getAllbookingsAPI)
+    let result = [];
+    try{
+        const response = await apiConnector('GET', getMybookingsAPI, 
+            {
+                Authorization: `Bearer ${token}`
+            }
+        );
+        result=response.data;
+        console.log("response: ", response.data);
+        if(!response.data.success){
+            throw new Error(response.data.message);
+        }
+        console.log("api: getMybookings successfully...");
+    }
+    catch(error){
+        console.log("error: getMybookings failed...", error);
+    }
+    return result;
 }
 
 export const bookTicketsService = (payload, token) => {
