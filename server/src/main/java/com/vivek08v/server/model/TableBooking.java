@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class TableBooking {
     private Integer id;
     private Integer userId;
-    private Integer noOfPeople;
+    private Integer noOfSeats;
     private LocalDate Date;
     private LocalTime Time;
     private String status;
@@ -20,7 +20,7 @@ public class TableBooking {
 
     public TableBooking(Integer userId, Integer noOfPeople, LocalDate Date, LocalTime Time, String status){
         this.userId = userId;
-        this.noOfPeople = noOfPeople;
+        this.noOfSeats = noOfPeople;
         this.Date = Date;
         this.Time = Time;
         this.status = status;
@@ -42,12 +42,12 @@ public class TableBooking {
         this.userId = userId;
     }
 
-    public Integer getNoOfPeople() {
-        return noOfPeople;
+    public Integer getNoOfSeats() {
+        return noOfSeats;
     }
 
-    public void setNoOfPeople(Integer noOfPeople) {
-        this.noOfPeople = noOfPeople;
+    public void setNoOfSeats(Integer noOfSeats) {
+        this.noOfSeats = noOfSeats;
     }
 
     public LocalDate getDate() {
@@ -79,7 +79,7 @@ public class TableBooking {
         return "TableBooking{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", numberOfPeople=" + noOfPeople +
+                ", noOfSeats=" + noOfSeats +
                 ", date=" + Date +
                 ", time=" + Time +
                 ", status='" + status + '\'' +

@@ -31,7 +31,7 @@ public class TableBookingRepo {
         template.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, tabBook.getUserId());
-            ps.setInt(2, tabBook.getNoOfPeople());
+            ps.setInt(2, tabBook.getNoOfSeats());
             ps.setDate(3, java.sql.Date.valueOf(tabBook.getDate()));
             ps.setTime(4, java.sql.Time.valueOf(tabBook.getTime()));
             ps.setString(5, tabBook.getStatus());
@@ -44,13 +44,29 @@ public class TableBookingRepo {
         return tabBook;
     }
 
+    public List<TableBooking> findMyBookings(Integer userId){
+        String sql = "SELECT * FROM tablebooking WHERE userId = ?";
+        List<TableBooking> myBookedTables = template.query(sql, (rs, rowNo) -> {
+            TableBooking tabBook = new TableBooking();
+            tabBook.setId(rs.getInt("id"));
+            tabBook.setUserId(rs.getInt("userId"));
+            tabBook.setNoOfSeats(rs.getInt("noOfPeoples"));
+            tabBook.setDate(rs.getDate("date").toLocalDate());
+            tabBook.setTime(rs.getTime("time").toLocalTime());
+            tabBook.setStatus(rs.getString("status"));
+            return tabBook;
+        }, userId);
+
+        return myBookedTables;
+    }
+
     public List<TableBooking> findAllBookings(){
         String sql = "SELECT * FROM tablebooking";
         List<TableBooking> allBookedTables = template.query(sql, (rs, rowNo) -> {
             TableBooking tabBook = new TableBooking();
             tabBook.setId(rs.getInt("id"));
             tabBook.setUserId(rs.getInt("userId"));
-            tabBook.setNoOfPeople(rs.getInt("noOfPeoples"));
+            tabBook.setNoOfSeats(rs.getInt("noOfPeoples"));
             tabBook.setDate(rs.getDate("date").toLocalDate());
             tabBook.setTime(rs.getTime("time").toLocalTime());
             tabBook.setStatus(rs.getString("status"));

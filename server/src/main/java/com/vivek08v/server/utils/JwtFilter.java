@@ -28,12 +28,12 @@ public class JwtFilter extends OncePerRequestFilter {
         String uri = req.getRequestURI();
 
         // Skip JWT validation for OPTIONS requests, auth endpoints, and health endpoints
-        if ("OPTIONS".equalsIgnoreCase(req.getMethod()) || 
+        if ("OPTIONS".equalsIgnoreCase(req.getMethod()) ||         //
             uri.startsWith("/api/v1/auth/") || 
             uri.equals("/health") || 
             uri.equals("/")) {
             System.out.println("Skipping JWT validation for: " + uri);
-            chain.doFilter(req, res);
+            chain.doFilter(req, res);                                           //
             return;
         }
 

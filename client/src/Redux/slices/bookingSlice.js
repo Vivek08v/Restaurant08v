@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+const oneBooking = {
+    id: null,
     date: null,
-    timeSlot: null,
+    time: null,
     noOfSeats: 0,
-    loading: null
+    status: null,
+    loading: null,
+}
+const initialState = {
+    booking: [],
+    loading: false
 }
 
 const bookingSlice = createSlice({
@@ -12,13 +18,14 @@ const bookingSlice = createSlice({
     initialState: initialState,
     reducers: {
         setBooking: (state, action) => {
-            state.date = action.payload.date;
-            state.timeSlot = action.payload.timeSlot;
-            state.noOfSeats = action.payload.noOfSeats;
+            // const {id, date, time, noOfSeats, status} = action.payload;
+            const booking = action.payload;
+            state.booking.push(booking);
+
+            console.log(state.booking);
         },
         setLoading: (state, action) => {
-            const {loading} = action.payload;
-            state.loading = loading;
+            state.loading = action.payload;
         }
     }
 });

@@ -3,11 +3,11 @@ package com.vivek08v.server.controller;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vivek08v.server.model.TableBooking;
 import com.vivek08v.server.repo.TableBookingRepo;
-import com.vivek08v.server.utils.JwtUtil;
 import com.vivek08v.server.utils.CustomUserDetails;
+import com.vivek08v.server.utils.JwtUtil;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -36,27 +36,33 @@ public class TableBookController {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
 
     @GetMapping("/all-bookings")
-    public void getAllBookings() {
+    public ResponseEntity<?> getAllBookings() {
         System.out.println("hi, server reached...");
-        // try{
-        //     List<TableBooking> bookings = List.of(
-        //         new TableBooking(101,101,2, LocalDateTime.parse("2025-08-01 10:00 AM", formatter), "done"),
-        //         new TableBooking(102,101,4, LocalDateTime.parse("2025-08-01 10:00 AM", formatter), "not-done")
-        //     );
-        //     Map<String, Object> response = new HashMap<>();
-        //     response.put("success", true);
-        //     response.put("message", "Bookings fetched successfully");
-        //     response.put("bookings", bookings);
-        //     return response;
-        // }
-        // catch(Exception e){
-        //     System.out.println("error>>> " + e);
-        //     Map<String, Object> errorResponse = new HashMap<>();
-        //     errorResponse.put("success", false);
-        //     errorResponse.put("message", "Error fetching bookings");
-        //     errorResponse.put("error", e.getMessage());
-        //     return errorResponse;
-        // }
+        try{
+			List<TableBooking> tabToReturn = tableBookingRepo.findAllBookings();
+            return ResponseEntity.status(HttpStatus.OK).body(new AllBookingResponse(tabToReturn, true));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Table Fetching failed");
+        }
+    }
+
+    @GetMapping("/my-bookings")
+    public ResponseEntity<?> getMyBookings() {
+        System.out.println("hi, server reached...");
+        try{
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+            Integer userId = user.getId();
+
+			List<TableBooking> tabToReturn = tableBookingRepo.findMyBookings(userId);
+            return ResponseEntity.status(HttpStatus.OK).body(new AllBookingResponse(tabToReturn, true));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Table Fetching failed");
+        }
     }
 
 
@@ -69,15 +75,6 @@ public class TableBookController {
                 return ResponseEntity.badRequest().body("Missing Date or Slot or Seats");
             }
 
-            // System.out.println("1");
-            // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            // String token = ((UsernamePasswordAuthenticationToken) auth).getCredentials().toString();
-
-            // System.out.println("2");
-            // String email = jwtUtil.extractUsername(token);
-            // Integer userId = jwtUtil.extractUserId(token);
-            // String role = jwtUtil.extractRole(token);
-
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
                     
@@ -89,7 +86,7 @@ public class TableBookController {
 
             TableBooking tableBooking = new TableBooking();
             tableBooking.setUserId(userId);
-            tableBooking.setNoOfPeople(request.getNoOfSeats());
+            tableBooking.setNoOfSeats(request.getNoOfSeats());
             tableBooking.setDate(request.getDate());
             tableBooking.setTime(request.getTime());
             tableBooking.setStatus("Booked");
@@ -103,6 +100,33 @@ public class TableBookController {
             System.out.println("Table Booking Error: " + e.getMessage());
             return ResponseEntity.internalServerError().body("Table Booking failed");
         }
+    }
+}
+
+class AllBookingResponse{
+    private List<TableBooking> allTableList;
+    private Boolean success;
+
+    public AllBookingResponse() {
+    }
+
+    public AllBookingResponse(List<TableBooking> allTableList, Boolean success){
+        this.allTableList = allTableList;
+        this.success = success;
+    }
+
+    public List<TableBooking> getAllTableList(){
+        return allTableList;
+    }
+    public void setAllTableList(List<TableBooking> allTableList){
+        this.allTableList = allTableList;
+    }
+
+    public Boolean getSuccess(){
+        return success;
+    }
+    public void setSuccess(Boolean success){
+        this.success = success;
     }
 }
 

@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 const Home = (props) => {
 
     const {user } = useSelector((state)=>(state.userSlice))
+    // const {booking} = useSelector((state)=>(state.bookingSlice))
+    // console.log(booking)
   return (
     <div className='h-screen w-screen bg-red-400 px-4 py-3'>
         <div className='h-full w-full flex flex-col bg-green-100'>

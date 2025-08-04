@@ -94,7 +94,7 @@ const Booking = () => {
         </div>
       </div>
 
-      {popUpIn && <PayPopUp slot={selectedSlot} date={selectedDate} noOfSeats={seats}/>}
+      {popUpIn && <PayPopUp slot={selectedSlot} date={selectedDate} noOfSeats={seats} onClose={setPopUpIn}/>}
     </div>
   );
 };

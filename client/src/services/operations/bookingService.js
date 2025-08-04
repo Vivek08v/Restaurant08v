@@ -45,7 +45,7 @@ export const bookTicketsService = (payload, token) => {
                 throw new Error(response.data.message);
             }
 
-            dispatch(setBooking(response.data));
+            dispatch(setBooking(response.data.booking));
             console.log("api: setBookingAPI successfully...");
         }
         catch(error){

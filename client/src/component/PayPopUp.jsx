@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { bookTicketsService, getAllbookingsService } from '../services/operations/bookingService';
 import { useDispatch, useSelector } from 'react-redux'
-
+import { useNavigate} from 'react-router-dom'
 const PayPopUp = ({ date, slot, noOfSeats, onClose }) => {
   const {token} = useSelector((state)=> state.userSlice);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isPaymentDone, setIsPaymentDone] = useState(false);
   const payload = {date: date, time: slot.substr(0, 5).trim(), noOfSeats: parseInt(noOfSeats)}
 
@@ -16,9 +17,7 @@ const PayPopUp = ({ date, slot, noOfSeats, onClose }) => {
 
   return (
     <>
-      {/* Overlay */}
       <div className="fixed inset-0 bg-black bg-opacity-40 z-40 flex items-center justify-center">
-        {/* Pop-up Card */}
         <div className="bg-white rounded-xl shadow-xl p-6 w-80 z-50 text-center animate-fade-in">
           {!isPaymentDone ? (
             <>
@@ -38,7 +37,7 @@ const PayPopUp = ({ date, slot, noOfSeats, onClose }) => {
               <h2 className="text-xl font-bold text-green-600 mb-2">🎉 Booking Confirmed!</h2>
               <p className="text-gray-700 mb-4">Your seat has been successfully booked.</p>
               <button
-                onClick={onClose}
+                onClick={()=> {onClose(false); navigate("/")}}
                 className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
               >
                 Close
