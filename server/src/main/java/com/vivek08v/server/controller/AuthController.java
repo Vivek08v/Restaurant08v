@@ -45,9 +45,10 @@ public class AuthController {
 
             System.out.println(user.getPassword() + request.getPassword());
             if (user.getEmail().equals(request.getEmail()) && user.getPassword().equals(request.getPassword())) {
-                System.out.println("hii11");
-                String token = jwtUtil.generateToken(user.getEmail(), user.getId(), "CUST");
-                System.out.println("Login successful, token generated");
+                System.out.println("hii11 "+ user);
+                // user.setRole("CUST");
+                String token = jwtUtil.generateToken(user.getEmail(), user.getId(), user.getRole());
+                System.out.println("Login successful, token generated: "+ user);
                 return ResponseEntity.ok(new AuthResponse(user, token, true));
             }
 

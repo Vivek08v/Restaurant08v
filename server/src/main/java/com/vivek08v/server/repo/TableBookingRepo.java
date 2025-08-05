@@ -75,4 +75,8 @@ public class TableBookingRepo {
 
         return allBookedTables;
     }
+
+    // public boolean findAllBookings() {
+    //     throw new UnsupportedOperationException("Not supported yet.");
+    // }
 }

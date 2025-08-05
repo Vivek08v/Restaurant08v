@@ -7,7 +7,7 @@ const PayPopUp = ({ date, slot, noOfSeats, onClose }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isPaymentDone, setIsPaymentDone] = useState(false);
-  const payload = {date: date, time: slot.substr(0, 5).trim(), noOfSeats: parseInt(noOfSeats)}
+  const payload = {date: date, time: slot.substr(0, 5).trim()+":00", noOfSeats: parseInt(noOfSeats)}
 
   const handlePay = () => {
     console.log(payload);

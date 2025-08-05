@@ -11,6 +11,7 @@ import BookedInfo from './page/BookedInfo'
 import Login from './page/Login'
 import Signup from './page/SignUp'
 import History from './page/History'
+import ManageOrder from './page/ManageOrder';
 
 function App() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function App() {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = JSON.parse(localStorage.getItem("user"));
+    console.log("user: ",storedUser);
     if (storedToken) {
       dispatch(setToken(storedToken));
       dispatch(setUser(storedUser));
@@ -31,6 +33,7 @@ function App() {
         <Route path='/booking' element={<Booking/>}/>
         <Route path='/book:id' element={<BookedInfo/>}/>
         <Route path='/history' element={<History/>}/>
+        <Route path='/manage-order' element={<ManageOrder/>}/>
 
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>

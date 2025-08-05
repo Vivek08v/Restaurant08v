@@ -78,6 +78,7 @@ public class UserRepo {
                 user.setId(rs.getInt("id"));
                 user.setPassword(rs.getString("password"));
                 user.setName(rs.getString("name"));
+                user.setRole(rs.getString("role"));
                 user.setEmail(rs.getString("email"));
                 user.setAddress(rs.getString("address"));
                 return user;

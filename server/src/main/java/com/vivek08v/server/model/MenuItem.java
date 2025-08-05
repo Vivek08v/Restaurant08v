@@ -9,7 +9,9 @@ public class MenuItem {
     private Integer id;
     private String name;
     private double price;
+    private Integer quantity;
     private String category;
+    private Boolean isVeg;
 
     public void setId(Integer id){
         this.id = id;
@@ -35,12 +37,28 @@ public class MenuItem {
         return this.price;
     }
 
+    public void setQuantity(Integer quantity){
+        this.quantity = quantity;
+    }
+
+    public Integer getQuantity(){
+        return this.quantity;
+    }
+
     public void setCategory(String category){
         this.category = category;
     }
 
     public String getCategory(){
         return this.category;
+    }
+
+    public void setIsVeg(Boolean isVeg){
+        this.isVeg = isVeg;
+    }
+
+    public Boolean getIsVeg(){
+        return isVeg;
     }
      
 }

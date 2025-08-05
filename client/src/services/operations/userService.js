@@ -43,7 +43,7 @@ export const logInService = (formData, navigate) => {
             dispatch(setLoading(false));
             console.log("api: logIn service successfully...");
             localStorage.setItem("token", response.data.token);
-            localStorage.setItem("user", JSON.stringify(response.data.token));
+            localStorage.setItem("user", JSON.stringify(response.data.user));
             navigate("/");
         }
         catch(error){

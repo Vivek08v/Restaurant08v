@@ -12,3 +12,7 @@ export const bookingEndPoints = {
     getMybookingsAPI: base_url+"/my-bookings",
     setBookingAPI: base_url+"/booking"
 }
+
+export const manageMenuEndPoints = {
+    getAllMenuItemDetailsAPI: base_url+"/manage-menu/menu-details"
+}
