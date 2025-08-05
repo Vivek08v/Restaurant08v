@@ -1,6 +1,6 @@
 import { apiConnector } from "../apiConnector";
 import { userEndPoints } from "../api";
-import { setUserAndToken, setLoading } from "../../Redux/slices/userSlice";
+import { setToken, setUser, setLoading } from "../../Redux/slices/userSlice";
 
 const { userSignUpAPI, userLogInAPI} = userEndPoints;
 
@@ -14,7 +14,7 @@ export const signUpService = (formData, navigate) => {
                 throw new Error(response.data.message);
             }
 
-            dispatch(setUserAndToken.data);
+            // dispatch(setUserAndToken(response.data));
             console.log("api: signUp service successfully...");
             dispatch(setLoading(false));
             navigate("/");
@@ -33,14 +33,17 @@ export const logInService = (formData, navigate) => {
         dispatch(setLoading(true));
         try{
             const response = await apiConnector('POST', userLogInAPI, null, formData, null);
-            console.log(response.data)
+            console.log(response.data.user)
             if(!response.data.success){
                 throw new Error(response.data.message);
             }
 
-            dispatch(setUserAndToken(response.data));
+            dispatch(setUser(response.data.user));
+            dispatch(setToken(response.data.token));
             dispatch(setLoading(false));
             console.log("api: logIn service successfully...");
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(response.data.token));
             navigate("/");
         }
         catch(error){

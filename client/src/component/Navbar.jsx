@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 const Navbar = () => {
     const {user} = useSelector((state)=> state.userSlice);
+    console.log(user);
 
     return (
         <div className="bg-amber-200 h-auto w-auto flex justify-around">

@@ -3,9 +3,9 @@ import Navbar from '../component/Navbar'
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-const Home = (props) => {
+const Home = () => {
 
-    const {user } = useSelector((state)=>(state.userSlice))
+    const {user, token} = useSelector((state)=>(state.userSlice))
     // const {booking} = useSelector((state)=>(state.bookingSlice))
     // console.log(booking)
   return (
