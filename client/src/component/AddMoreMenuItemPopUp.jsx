@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
+import { editMenuItemDetails } from '../services/operations/manageMenuService';
 
-const AddMoreMenuItemPopUp = ({ close }) => {
+const AddMoreMenuItemPopUp = ({ close, item, editMenuItem }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    category: '',
-    price: '',
-    available: true,
+    id: item.id,
+    name: item.name,
+    category: item.category,
+    price: item.price,
+    quantity: item.quantity,
+    isVeg: item.isVeg
   });
 
   const handleChange = (e) => {
@@ -20,6 +23,7 @@ const AddMoreMenuItemPopUp = ({ close }) => {
     e.preventDefault();
     console.log('New Menu Item:', formData);
     // TODO: Add logic to save new item
+    editMenuItem(formData);
     close(false); // Close the popup
   };
 
@@ -37,6 +41,7 @@ const AddMoreMenuItemPopUp = ({ close }) => {
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200"
               required
+              readOnly
             />
           </div>
           <div>
@@ -48,6 +53,7 @@ const AddMoreMenuItemPopUp = ({ close }) => {
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200"
               required
+              readOnly
             />
           </div>
           <div>
@@ -61,15 +67,27 @@ const AddMoreMenuItemPopUp = ({ close }) => {
               required
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Quantity </label>
+            <input
+              type="number"
+              name="quantity"
+              value={formData.quantity}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200"
+              required
+            />
+          </div>
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              name="available"
-              checked={formData.available}
+              name="isVeg"
+              checked={formData.isVeg}
               onChange={handleChange}
               className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+              disabled
             />
-            <label className="text-sm text-gray-700">Available</label>
+            <label className="text-sm text-gray-700">is Veg? </label>
           </div>
           <div className="flex justify-end gap-3 mt-6">
             <button

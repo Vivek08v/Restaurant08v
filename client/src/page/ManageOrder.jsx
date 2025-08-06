@@ -5,7 +5,7 @@ import { MdEdit } from "react-icons/md";
 import { FaTrashAlt } from "react-icons/fa";
 import AddNewMenuItemPopUp from '../component/AddNewMenuItemPopUp';
 import AddMoreMenuItemPopUp from '../component/AddMoreMenuItemPopUp';
-import { getAllMenuItemDetails } from '../services/operations/manageMenuService';
+import { editMenuItemDetails, getAllMenuItemDetails } from '../services/operations/manageMenuService';
 
 const foodItems = [
   {
@@ -56,6 +56,18 @@ const ManageOrder = () => {
 
     const [openAddNewMenuItemPopUp, setOpenAddNewMenuItemPopUp] = useState(false);
     const [openAddMoreMenuItemPopUp, setOpenAddMoreMenuItemPopUp] = useState(false);
+
+    const [menuItemToEdit, setMenuItemToEdit] = useState({});
+
+    const editMenuItem = async(formData)=>{
+      console.log("hii")
+      const response = await editMenuItemDetails(formData, token);
+      console.log(response);
+      setAlldata((prev)=> prev.map((item)=>(
+        item.id === response.id ? {...item, quantity: response.quantity, price: response.price} : item
+      )))
+      // now edit the allData state
+    }
 
     const getAllMenuDetails = async()=>{
       const response = await getAllMenuItemDetails(token);
@@ -117,7 +129,7 @@ const ManageOrder = () => {
                 </td>
                 <td className="px-4 py-2 flex items-center gap-3 text-gray-600">
                   <IoEyeSharp className="h-5 w-5 hover:text-blue-500 cursor-pointer" />
-                  <MdEdit onClick={()=>setOpenAddMoreMenuItemPopUp(true)} className="h-5 w-5 hover:text-yellow-500 cursor-pointer" />
+                  <MdEdit onClick={()=>{setOpenAddMoreMenuItemPopUp(true); setMenuItemToEdit(item)}} className="h-5 w-5 hover:text-yellow-500 cursor-pointer" />
                   <FaTrashAlt className="h-5 w-5 hover:text-red-500 cursor-pointer" />
                 </td>
               </tr>
@@ -127,7 +139,7 @@ const ManageOrder = () => {
       </div>
 
       {openAddNewMenuItemPopUp &&<AddNewMenuItemPopUp close={setOpenAddNewMenuItemPopUp}/>}
-      {openAddMoreMenuItemPopUp &&<AddMoreMenuItemPopUp close={setOpenAddMoreMenuItemPopUp}/>}
+      {openAddMoreMenuItemPopUp &&<AddMoreMenuItemPopUp item={menuItemToEdit} editMenuItem={editMenuItem} close={setOpenAddMoreMenuItemPopUp}/>}
     </div>
   );
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class MenuItem {
     private Integer id;
     private String name;
-    private double price;
+    private Double price;
     private Integer quantity;
     private String category;
     private Boolean isVeg;
@@ -29,11 +29,11 @@ public class MenuItem {
         return this.name;
     }
 
-    public void setPrice(double price){
+    public void setPrice(Double price){
         this.price = price;
     }
 
-    public double getPrice(){
+    public Double getPrice(){
         return this.price;
     }
 

@@ -1,10 +1,14 @@
 package com.vivek08v.server.repo;
 
+import java.awt.Menu;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import com.vivek08v.server.model.MenuItem;
 
@@ -28,13 +32,45 @@ public class MenuItemRepo {
             menuItem.setId(rs.getInt("id"));
             menuItem.setName(rs.getString("name"));
             menuItem.setCategory(rs.getString("category"));
-            menuItem.setPrice(rs.getFloat("price"));
+            menuItem.setPrice(rs.getDouble("price"));
             menuItem.setQuantity(rs.getInt("quantity"));
             menuItem.setIsVeg(rs.getBoolean("isVeg"));
             return menuItem;
         });
         return allMenuList;
     }
+
+
+    public MenuItem manageMenu(MenuItem menuItem) {
+        String updateSql = "UPDATE menuItem SET quantity = ?, price = ? WHERE id = ?";
+        String selectSql = "SELECT * FROM menuItem WHERE id = ?";
+
+        int rowsAffected = template.update(updateSql,
+            menuItem.getQuantity(),
+            menuItem.getPrice(),
+            menuItem.getId()
+        );
+
+        if (rowsAffected > 0) {
+            return template.queryForObject(selectSql,
+                (rs, rowNum) -> {
+                    MenuItem updatedItem = new MenuItem();
+                    updatedItem.setId(rs.getInt("id"));
+                    updatedItem.setName(rs.getString("name"));
+                    updatedItem.setCategory(rs.getString("category"));
+                    updatedItem.setPrice(rs.getDouble("price"));
+                    updatedItem.setQuantity(rs.getInt("quantity"));
+                    updatedItem.setIsVeg(rs.getBoolean("isVeg")); // column name may vary
+                    return updatedItem;
+                },
+                menuItem.getId() // ✅ passed as vararg, not Object[]
+            );
+        } else {
+            throw new RuntimeException("No menu item found with ID = " + menuItem.getId());
+        }
+    }
+
+
 
     // public TableBooking saveBooking(TableBooking tabBook){
     //     String sql = "insert into tableBooking (userId, noOfPeoples, date, time, status) values (?, ?, ?, ?, ?)";
