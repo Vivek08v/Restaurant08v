@@ -1,14 +1,13 @@
 package com.vivek08v.server.repo;
 
-import java.awt.Menu;
 import java.sql.PreparedStatement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import com.vivek08v.server.model.MenuItem;
 
@@ -68,6 +67,28 @@ public class MenuItemRepo {
         } else {
             throw new RuntimeException("No menu item found with ID = " + menuItem.getId());
         }
+    }
+
+    
+    public MenuItem addNewItemMenu(MenuItem menuItem) {
+        String sql = "insert into menuItem (name, category, quantity, price, isVeg, imageUrl) values (?, ?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        
+        template.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, menuItem.getName());
+            ps.setString(2, menuItem.getCategory());
+            ps.setInt(3, menuItem.getQuantity());
+            ps.setDouble(4, menuItem.getPrice());
+            ps.setBoolean(5, menuItem.getIsVeg());
+            ps.setString(6, menuItem.getImageUrl());
+            return ps;
+        }, keyHolder);
+
+        menuItem.setId(keyHolder.getKey().intValue());
+
+        System.out.println("Added successfully with ID = " + menuItem.getId());
+        return menuItem;
     }
 
 

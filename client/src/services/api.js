@@ -15,5 +15,6 @@ export const bookingEndPoints = {
 
 export const manageMenuEndPoints = {
     getAllMenuItemDetailsAPI: base_url+"/manage-menu/menu-details",
-    editMenuItemDetailsAPI: base_url+"/manage-menu/edit-menu-details"
+    editMenuItemDetailsAPI: base_url+"/manage-menu/edit-menu-details",
+    addNewMenuItemDetailsAPI: base_url+"/manage-menu/add-menu-details"
 }

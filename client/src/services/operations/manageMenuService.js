@@ -1,7 +1,7 @@
 import { apiConnector } from "../apiConnector";
 import { manageMenuEndPoints } from "../api";
 
-const { getAllMenuItemDetailsAPI, editMenuItemDetailsAPI } = manageMenuEndPoints;
+const { getAllMenuItemDetailsAPI, editMenuItemDetailsAPI, addNewMenuItemDetailsAPI } = manageMenuEndPoints;
 
 export const getAllMenuItemDetails = async(token) => {
     let result = [];
@@ -47,6 +47,32 @@ export const editMenuItemDetails = async(formData, token) => {
     }
     catch(e){
         console.log("API: error in editMenuItemDetails...");
+    }
+    return result;
+}
+
+
+export const addNewMenuItemDetails = async(formData, token) => {
+    let result;
+    try{
+        const response = await apiConnector("POST", addNewMenuItemDetailsAPI,
+            {
+                Authorization: `Bearer ${token}`,
+                // "Content-Type": "multipart/form-data",
+            },
+            formData
+        )
+
+        if(!response.data.success){
+            throw Error("error in addNewMenuItemDetails");
+        }
+
+        result = response.data.menuItem;
+        console.log(result)
+        console.log("API: addNewMenuItemDetails executed Successfully...");
+    }
+    catch(e){
+        console.log("API: error in addNewMenuItemDetails...");
     }
     return result;
 }

@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/my-bookings").hasAnyRole("CUST", "ADMIN")
                 .requestMatchers("/api/v1/all-bookings").hasRole("ADMIN")
                 .requestMatchers("/api/v1/manage-menu").hasRole("ADMIN")
+                .requestMatchers("/api/v1//add-menu-details").hasRole("ADMIN")
                 .requestMatchers("/api/v1/test/auth").authenticated()
                 .requestMatchers("/api/v1/test/admin").hasRole("ADMIN")
                 .requestMatchers("/api/v1/test/customer").hasRole("CUST")

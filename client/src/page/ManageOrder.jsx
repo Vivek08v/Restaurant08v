@@ -5,7 +5,7 @@ import { MdEdit } from "react-icons/md";
 import { FaTrashAlt } from "react-icons/fa";
 import AddNewMenuItemPopUp from '../component/AddNewMenuItemPopUp';
 import AddMoreMenuItemPopUp from '../component/AddMoreMenuItemPopUp';
-import { editMenuItemDetails, getAllMenuItemDetails } from '../services/operations/manageMenuService';
+import { editMenuItemDetails, getAllMenuItemDetails, addNewMenuItemDetails } from '../services/operations/manageMenuService';
 
 const foodItems = [
   {
@@ -58,6 +58,21 @@ const ManageOrder = () => {
     const [openAddMoreMenuItemPopUp, setOpenAddMoreMenuItemPopUp] = useState(false);
 
     const [menuItemToEdit, setMenuItemToEdit] = useState({});
+    const [menuItemToAdd, setMenuItemToAdd] = useState({});
+
+    const addMenuItem = async(formData)=>{
+      console.log("hii")
+      const jsonBlob = new Blob([JSON.stringify(formData)], {
+        type: 'application/json',
+      });
+      const form = new FormData();
+      form.append("data", jsonBlob); // object
+      form.append("image", formData.image); // file
+
+      const response = await addNewMenuItemDetails(form, token);
+      console.log(response);
+      setAlldata((prev)=> response ? [...prev, response] : prev);
+    }
 
     const editMenuItem = async(formData)=>{
       console.log("hii")
@@ -66,7 +81,6 @@ const ManageOrder = () => {
       setAlldata((prev)=> prev.map((item)=>(
         item.id === response.id ? {...item, quantity: response.quantity, price: response.price} : item
       )))
-      // now edit the allData state
     }
 
     const getAllMenuDetails = async()=>{
@@ -138,7 +152,7 @@ const ManageOrder = () => {
         </table>
       </div>
 
-      {openAddNewMenuItemPopUp &&<AddNewMenuItemPopUp close={setOpenAddNewMenuItemPopUp}/>}
+      {openAddNewMenuItemPopUp &&<AddNewMenuItemPopUp addMenuItem={addMenuItem} close={setOpenAddNewMenuItemPopUp}/>}
       {openAddMoreMenuItemPopUp &&<AddMoreMenuItemPopUp item={menuItemToEdit} editMenuItem={editMenuItem} close={setOpenAddMoreMenuItemPopUp}/>}
     </div>
   );

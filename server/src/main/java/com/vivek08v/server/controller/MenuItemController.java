@@ -4,16 +4,20 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vivek08v.server.model.MenuItem;
 import com.vivek08v.server.repo.MenuItemRepo;
+import com.vivek08v.server.utils.CloudinaryService;
 import com.vivek08v.server.utils.JwtUtil;
 
 
@@ -29,6 +33,9 @@ public class MenuItemController {
 
     @Autowired
     JwtUtil jwtUtil;
+
+    @Autowired
+    CloudinaryService cloudinaryService;
 
     MenuItemController(MenuItem menuItem) {
         this.menuItem = menuItem;
@@ -50,6 +57,36 @@ public class MenuItemController {
             }
 
             MenuItem menuItem = menuItemRepo.manageMenu(request);
+            return ResponseEntity.status(HttpStatus.OK).body(new MenuItemResponse(menuItem, true));
+        } catch (Exception e) {
+            System.out.println("Error in edit-menu-details"+ e);
+        }
+        return ResponseEntity.internalServerError().body("Menu Updation failed");
+    }
+
+    @PostMapping(value = "/add-menu-details", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addNewMenuDetails( @RequestPart("data") MenuItem data,
+                                                @RequestPart("image") MultipartFile image)
+    {
+        System.out.println("Reached controller"+ data);
+        System.out.println("1");
+        try {
+            System.out.println("2");
+            if(data.getName()==null || data.getPrice()==null || data.getQuantity()==null){
+                System.out.println("3");
+                return ResponseEntity.badRequest().body("Missing request values, id or price or quantity");
+            }
+            System.out.println("4");
+
+            String imageUrl = null;
+            if(image!=null){
+                imageUrl = cloudinaryService.uploadFile(image);
+            }
+            System.out.println(imageUrl);
+            data.setImageUrl(imageUrl);
+            System.out.println(data.getImageUrl());
+            MenuItem menuItem = menuItemRepo.addNewItemMenu(data);
+
             return ResponseEntity.status(HttpStatus.OK).body(new MenuItemResponse(menuItem, true));
         } catch (Exception e) {
             System.out.println("Error in edit-menu-details"+ e);
@@ -110,70 +147,70 @@ class MenuListResponse{
 }
 
 
-// class MenuRequest {
-//     private Integer id;
-//     private String name;
-//     private String category;
-//     private Integer quantity;
-//     private Float price;
-//     private Boolean isVeg;
+class MenuRequest {
+    private Integer id;
+    private String name;
+    private String category;
+    private Integer quantity;
+    private Float price;
+    private Boolean isVeg;
 
-//     public MenuRequest() {}
+    public MenuRequest() {}
 
-//     public MenuRequest(Integer id, String name, String category, Integer quantity, Float price, Boolean isVeg) {
-//         this.id = id;
-//         this.name = name;
-//         this.category = category;
-//         this.quantity = quantity;
-//         this.price = price;
-//         this.isVeg = isVeg;
-//     }
+    public MenuRequest(Integer id, String name, String category, Integer quantity, Float price, Boolean isVeg) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.quantity = quantity;
+        this.price = price;
+        this.isVeg = isVeg;
+    }
 
-//     public Integer getId() {
-//         return id;
-//     }
+    public Integer getId() {
+        return id;
+    }
 
-//     public void setId(Integer id) {
-//         this.id = id;
-//     }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-//     public String getName(){
-//         return this.name;
-//     }
+    public String getName(){
+        return this.name;
+    }
 
-//     public void setName(String name){
-//         this.name = name;
-//     }
+    public void setName(String name){
+        this.name = name;
+    }
 
-//     public String getCategory(){
-//         return this.name;
-//     }
+    public String getCategory(){
+        return this.name;
+    }
 
-//     public void setCategory(String category){
-//         this.category = category;
-//     }
+    public void setCategory(String category){
+        this.category = category;
+    }
 
-//     public Integer getQuantity() {
-//         return quantity;
-//     }
+    public Integer getQuantity() {
+        return quantity;
+    }
 
-//     public void setQuantity(Integer quantity) {
-//         this.quantity = quantity;
-//     }
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
-//     public Float getPrice() {
-//         return price;
-//     }
+    public Float getPrice() {
+        return price;
+    }
 
-//     public void setPrice(Float price) {
-//         this.price = price;
-//     }
+    public void setPrice(Float price) {
+        this.price = price;
+    }
 
-//     public Boolean getIsVeg(){
-//         return this.isVeg;
-//     }
+    public Boolean getIsVeg(){
+        return this.isVeg;
+    }
 
-//     public void setIsVeg(Boolean isVeg){
-//         this.isVeg = isVeg;
-//     }
-// }
+    public void setIsVeg(Boolean isVeg){
+        this.isVeg = isVeg;
+    }
+}

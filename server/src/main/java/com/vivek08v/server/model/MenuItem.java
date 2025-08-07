@@ -12,6 +12,7 @@ public class MenuItem {
     private Integer quantity;
     private String category;
     private Boolean isVeg;
+    private String imageUrl;
 
     public void setId(Integer id){
         this.id = id;
@@ -52,13 +53,20 @@ public class MenuItem {
     public String getCategory(){
         return this.category;
     }
-
+    
     public void setIsVeg(Boolean isVeg){
         this.isVeg = isVeg;
     }
-
+    
     public Boolean getIsVeg(){
         return isVeg;
     }
-     
+    
+    public void setImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl(){
+        return this.imageUrl;
+    }
 }
