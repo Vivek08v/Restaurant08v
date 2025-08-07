@@ -17,7 +17,7 @@ const Home = () => {
                     <button className='p-5 bg-green-300'>Book Table</button>
                 </NavLink>}
 
-                {(!user || user.role==="CUST") && <NavLink to={user? "/order" : "/login"}>
+                {(!user || user.role==="CUST") && <NavLink to={user? "/order-food" : "/login"}>
                     <button className='p-5 bg-green-300'>Order Home</button>
                 </NavLink>}
 

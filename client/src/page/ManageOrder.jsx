@@ -85,7 +85,7 @@ const ManageOrder = () => {
 
     const getAllMenuDetails = async()=>{
       const response = await getAllMenuItemDetails(token);
-      setAlldata(response.allMenuItems);//
+      setAlldata(response);
       console.log("printing all MenuDetails: ", response);
     }
 

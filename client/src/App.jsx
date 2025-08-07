@@ -12,6 +12,8 @@ import Login from './page/Login'
 import Signup from './page/SignUp'
 import History from './page/History'
 import ManageOrder from './page/ManageOrder';
+import OrderFood from './page/OrderFood';
+import FoodItemPage from './component/FoodItemPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +36,8 @@ function App() {
         <Route path='/book:id' element={<BookedInfo/>}/>
         <Route path='/history' element={<History/>}/>
         <Route path='/manage-order' element={<ManageOrder/>}/>
+        <Route path='/order-food' element={<OrderFood/>}/>
+        <Route path="/order-food/item/:id" element={<FoodItemPage />} />
 
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>

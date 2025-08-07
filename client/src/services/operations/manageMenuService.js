@@ -16,7 +16,7 @@ export const getAllMenuItemDetails = async(token) => {
             throw Error("Error in getAllMenuItemDetails");
         }
 
-        result = response.data;  //check here
+        result = response.data.allMenuItems;
         console.log("API: getAllMenuItemDetails executed successfully...", response);
     }
     catch(e){

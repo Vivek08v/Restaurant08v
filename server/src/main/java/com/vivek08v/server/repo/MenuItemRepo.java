@@ -34,6 +34,7 @@ public class MenuItemRepo {
             menuItem.setPrice(rs.getDouble("price"));
             menuItem.setQuantity(rs.getInt("quantity"));
             menuItem.setIsVeg(rs.getBoolean("isVeg"));
+            menuItem.setImageUrl(rs.getString("imageUrl"));
             return menuItem;
         });
         return allMenuList;
@@ -59,7 +60,8 @@ public class MenuItemRepo {
                     updatedItem.setCategory(rs.getString("category"));
                     updatedItem.setPrice(rs.getDouble("price"));
                     updatedItem.setQuantity(rs.getInt("quantity"));
-                    updatedItem.setIsVeg(rs.getBoolean("isVeg")); // column name may vary
+                    updatedItem.setIsVeg(rs.getBoolean("isVeg")); 
+                    updatedItem.setImageUrl(rs.getString("imageUrl")); 
                     return updatedItem;
                 },
                 menuItem.getId() // ✅ passed as vararg, not Object[]
